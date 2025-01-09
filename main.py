@@ -52,7 +52,7 @@ class Presentation(Slide):
             y_range=[0, 100, 10],
             axis_config={"color": WHITE},
         )
-        axes_labels = axes.get_axis_labels(x_label="t", y_label="\$")
+        axes_labels = axes.get_axis_labels(x_label="t", y_label=r"\$")
 
         # Create pump and dump price function with noise
         def noisy_pump_and_dump(x):
@@ -93,9 +93,35 @@ class Presentation(Slide):
             FadeOut(dump_label),
         )
 
-        # TODO: IDEA SLIDE
+        # IDEA SLIDE
+        self.next_slide()
 
-        # TODO: ADD HOW WE DECIDED TO USE REDDIT
+        idea_title = Text("Idea").to_edge(UL)
+        idea_points = VGroup(
+            Text("Models trained on social media data before scam events").scale(0.8),
+            Text("Detect fraudulent cryptocurrencies using machine learning").scale(0.8),
+            Text("Compare graph-based and traditional models").scale(0.8),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=1)
+
+        self.play(Write(idea_title))
+        self.play(Write(idea_points))
+        self.next_slide()
+        self.play(FadeOut(idea_title), FadeOut(idea_points))
+
+        # WHY REDDIT SLIDE
+        self.next_slide()
+
+        reddit_title = Text("Why Reddit?").to_edge(UL)
+        reddit_points = VGroup(
+            Text("Reddit offers hierarchical data ideal for graph-based models").scale(0.8),
+            Text("Rich social interactions provide meaningful insights").scale(0.8),
+            Text("Google and Twitter lacked reliable or suitable data structures").scale(0.8),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=1)
+
+        self.play(Write(reddit_title))
+        self.play(Write(reddit_points))
+        self.next_slide()
+        self.play(FadeOut(reddit_title), FadeOut(reddit_points))
 
         # Data Scraping Process: Show workflow from Google to Reddit to Elasticsearch
         self.next_slide()
@@ -187,7 +213,7 @@ class Presentation(Slide):
                     Text(name).scale(coin_name_size),
                 ).arrange(DOWN, buff=0.1)
                 for name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain"]
-            ]
+            ],
         ).arrange(RIGHT, buff=0.5)
 
         # Create train set scam coins
@@ -198,7 +224,7 @@ class Presentation(Slide):
                     Text(name).scale(coin_name_size),
                 ).arrange(DOWN, buff=0.1)
                 for name in ["BeerCoin", "BitForex", "Terra Luna"]
-            ]
+            ],
         ).arrange(RIGHT, buff=0.5)
 
         # Create test set non-scam coins
@@ -209,7 +235,7 @@ class Presentation(Slide):
                     Text(name).scale(coin_name_size),
                 ).arrange(DOWN, buff=0.1)
                 for name in ["Cosmos", "Ethereum"]
-            ]
+            ],
         ).arrange(RIGHT, buff=0.5)
 
         # Create test set scam coins
@@ -220,7 +246,7 @@ class Presentation(Slide):
                     Text(name).scale(coin_name_size),
                 ).arrange(DOWN, buff=0.1)
                 for name in ["Safe Moon", "FTX Token"]
-            ]
+            ],
         ).arrange(RIGHT, buff=0.5)
 
         # Group coins by category
@@ -247,20 +273,20 @@ class Presentation(Slide):
         # Arrange groups for display
         train_set_group = Group(train_non_scam_group, train_scam_group).arrange(DOWN, buff=1)
         test_set_group = Group(test_non_scam_group, test_scam_group).arrange(DOWN, buff=1)
-        main_group = Group(train_set_group, test_set_group).arrange(RIGHT, buff=2)
+        main_group = Group(train_set_group, test_set_group).arrange(RIGHT, buff=1)
 
         self.play(FadeIn(main_group))
 
         # Add dataset statistics
         explanation_text = (
-            Text("""
-        Train set (7 coins): 4 Non-scam, 3 Scam
-        Test set (4 coins): 2 Non-scam, 2 Scam
-            """)
-            .scale(0.5)
+            Group(
+                Text("Train set (7 coins): 4 Non-scam, 3 Scam").scale(0.5),
+                Text("Test set (4 coins): 2 Non-scam, 2 Scam").scale(0.5),
+            )
+            .arrange(DOWN, aligned_edge=LEFT, buff=0.1)
             .to_edge(DOWN)
         )
-        self.play(Write(explanation_text))
+        self.play(FadeIn(explanation_text))
 
         self.next_slide()
         self.play(
@@ -307,6 +333,7 @@ class Presentation(Slide):
 
         # Model Descriptions: Present each classification model
 
+        # TODO: Mention evaluation points
         # Multinomial Naive Bayes
         self.next_slide()
         mnb_title = Text("Multinomial Naive Bayes (Baseline)").scale(0.9).set_color(YELLOW).to_edge(UL)
@@ -321,9 +348,93 @@ class Presentation(Slide):
         self.next_slide()
         self.play(FadeOut(mnb_title), FadeOut(mnb_points))
 
-        # TODO: ADD RESULTS SLIDE
+        # Results slide
+
+        # Parameters for sizes
+        title_size = 1
+        header_size = 0.7
+        coin_name_size = 0.7
+        score_size = 0.7
+        title_buff = 0.2
+        column_buff = 1
+        group_buff = 2
+
+        title = Text("Metrics").scale(title_size).to_corner(UL)
+
+        scores = {
+            "Avalanche": 1,
+            "Bitcoin": 1,
+            "Chainlink": 1,
+            "THORChain": 1,
+            "BeerCoin": 0.81,
+            "BitForex": 0,
+            "Terra Luna": 0,
+            "Cosmos": 1,
+            "Ethereum": 1,
+            "Safe Moon": 0,
+            "FTX Token": 0,
+        }
+
+        # Vertical groups for train set
+        train_coin_names = Group(
+            Text("Coin", color=GREY).scale(header_size),  # Header
+            *[
+                Text(name, color=GREEN if name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain"] else RED).scale(
+                    coin_name_size,
+                )
+                for name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain", "BeerCoin", "BitForex", "Terra Luna"]
+            ],
+        ).arrange(DOWN, buff=title_buff)
+
+        train_scores = Group(
+            Text("Accuracy", color=GREY).scale(header_size),  # Header
+            *[
+                Text(
+                    f"{scores[name]}",
+                    color=GREEN if name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain"] else RED,
+                ).scale(score_size)
+                for name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain", "BeerCoin", "BitForex", "Terra Luna"]
+            ],
+        ).arrange(DOWN, buff=title_buff)
+
+        # Vertical groups for test set
+        test_coin_names = Group(
+            Text("Coin", color=GREY).scale(header_size),  # Header
+            *[
+                Text(name, color=GREEN if name in ["Cosmos", "Ethereum"] else RED).scale(coin_name_size)
+                for name in ["Cosmos", "Ethereum", "Safe Moon", "FTX Token"]
+            ],
+        ).arrange(DOWN, buff=title_buff)
+
+        test_scores = Group(
+            Text("Accuracy", color=GREY).scale(header_size),  # Header
+            *[
+                Text(f"{scores[name]}", color=GREEN if name in ["Cosmos", "Ethereum"] else RED).scale(score_size)
+                for name in ["Cosmos", "Ethereum", "Safe Moon", "FTX Token"]
+            ],
+        ).arrange(DOWN, buff=title_buff)
+
+        # Combine train and test groups
+        train_group = Group(
+            Text("Train Set").scale(header_size),
+            Group(train_coin_names, train_scores).arrange(RIGHT, buff=column_buff),
+        ).arrange(DOWN, buff=title_buff)
+
+        test_group = Group(
+            Text("Test Set").scale(header_size),
+            Group(test_coin_names, test_scores).arrange(RIGHT, buff=column_buff),
+        ).arrange(DOWN, buff=title_buff)
+
+        main_group = Group(train_group, test_group).arrange(RIGHT, buff=group_buff)
+
+        self.play(Write(title))
+        self.play(FadeIn(main_group))
+        self.next_slide()
+        self.play(FadeOut(main_group), FadeOut(title))
 
         # Linear Support Vector Classifier
+
+        # TODO: Mention that we dont use evaluation points anymore
         self.next_slide()
         svc_title = Text("Linear Support Vector Classifier").scale(0.9).set_color(ORANGE).to_edge(UL)
         svc_points = VGroup(
@@ -337,7 +448,89 @@ class Presentation(Slide):
         self.next_slide()
         self.play(FadeOut(svc_title), FadeOut(svc_points))
 
-        # TODO: ADD RESULTS SLIDE
+        # Results slide
+
+        # Parameters for sizes
+        title_size = 1
+        header_size = 0.7
+        coin_name_size = 0.7
+        score_size = 0.7
+        title_buff = 0.2
+        column_buff = 1
+        group_buff = 2
+
+        title = Text("Metrics").scale(title_size).to_corner(UL)
+
+        scores = {
+            "Avalanche": 0.528,
+            "Bitcoin": 0.545,
+            "Chainlink": 0.515,
+            "THORChain": 0.507,
+            "BeerCoin": 0.595,
+            "BitForex": 0.65,
+            "Terra Luna": 0.365,
+            "Cosmos": 0.5074,
+            "Ethereum": 0.649,
+            "Safe Moon": 0.395,
+            "FTX Token": 0.428,
+        }
+
+        # Vertical groups for train set
+        train_coin_names = Group(
+            Text("Coin", color=GREY).scale(header_size),  # Header
+            *[
+                Text(name, color=GREEN if name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain"] else RED).scale(
+                    coin_name_size,
+                )
+                for name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain", "BeerCoin", "BitForex", "Terra Luna"]
+            ],
+        ).arrange(DOWN, buff=title_buff)
+
+        train_scores = Group(
+            Text("Accuracy", color=GREY).scale(header_size),  # Header
+            *[
+                Text(
+                    f"{scores[name]}",
+                    color=GREEN if name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain"] else RED,
+                ).scale(score_size)
+                for name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain", "BeerCoin", "BitForex", "Terra Luna"]
+            ],
+        ).arrange(DOWN, buff=title_buff)
+
+        # Vertical groups for test set
+        test_coin_names = Group(
+            Text("Coin", color=GREY).scale(header_size),  # Header
+            *[
+                Text(name, color=GREEN if name in ["Cosmos", "Ethereum"] else RED).scale(coin_name_size)
+                for name in ["Cosmos", "Ethereum", "Safe Moon", "FTX Token"]
+            ],
+        ).arrange(DOWN, buff=title_buff)
+
+        test_scores = Group(
+            Text("Accuracy", color=GREY).scale(header_size),  # Header
+            *[
+                Text(f"{scores[name]}", color=GREEN if name in ["Cosmos", "Ethereum"] else RED).scale(score_size)
+                for name in ["Cosmos", "Ethereum", "Safe Moon", "FTX Token"]
+            ],
+        ).arrange(DOWN, buff=title_buff)
+
+        # Combine train and test groups
+        train_group = Group(
+            Text("Train Set").scale(header_size),
+            Group(train_coin_names, train_scores).arrange(RIGHT, buff=column_buff),
+        ).arrange(DOWN, buff=title_buff)
+
+        test_group = Group(
+            Text("Test Set").scale(header_size),
+            Group(test_coin_names, test_scores).arrange(RIGHT, buff=column_buff),
+        ).arrange(DOWN, buff=title_buff)
+
+        main_group = Group(train_group, test_group).arrange(RIGHT, buff=group_buff)
+
+        self.play(Write(title))
+        self.play(FadeIn(main_group))
+        self.next_slide()
+        self.play(FadeOut(main_group), FadeOut(title))
 
         # Graph Attention Network
         self.next_slide()
@@ -349,7 +542,65 @@ class Presentation(Slide):
         self.next_slide()
         self.play(FadeOut(gat_title), FadeOut(gat_graphic))
 
-        # TODO: ADD RESULTS SLIDE
+        # TODO: Show how GAT transforms a graph
+
+        # Results Slide
+
+        # Parameters for sizes
+        title_size = 1
+        header_size = 0.7
+        coin_name_size = 0.7
+        score_size = 0.7
+        title_buff = 0.2
+        column_buff = 1
+        group_buff = 2
+
+        title = Text("Metrics").scale(title_size).to_corner(UL)
+
+        scores = {
+            "Avalanche": "0.999...",
+            "Bitcoin": 0.761,
+            "Chainlink": 0.611,
+            "THORChain": 0.633,
+            "BeerCoin": 0.318,
+            "BitForex": 0.482,
+            "Terra Luna": 0.355,
+        }
+
+        # Vertical groups for train set
+        train_coin_names = Group(
+            Text("Coin", color=GREY).scale(header_size),  # Header
+            *[
+                Text(name, color=GREEN if name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain"] else RED).scale(
+                    coin_name_size,
+                )
+                for name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain", "BeerCoin", "BitForex", "Terra Luna"]
+            ],
+        ).arrange(DOWN, buff=title_buff)
+
+        train_scores = Group(
+            Text("Accuracy", color=GREY).scale(header_size),  # Header
+            *[
+                Text(
+                    f"{scores[name]}",
+                    color=GREEN if name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain"] else RED,
+                ).scale(score_size)
+                for name in ["Avalanche", "Bitcoin", "Chainlink", "THORChain", "BeerCoin", "BitForex", "Terra Luna"]
+            ],
+        ).arrange(DOWN, buff=title_buff)
+
+        # Combine train and test groups
+        train_group = Group(
+            Text("Train Set").scale(header_size),
+            Group(train_coin_names, train_scores).arrange(RIGHT, buff=column_buff),
+        ).arrange(DOWN, buff=title_buff)
+
+        main_group = Group(train_group).arrange(RIGHT, buff=group_buff)
+
+        self.play(Write(title))
+        self.play(FadeIn(main_group))
+        self.next_slide()
+        self.play(FadeOut(main_group), FadeOut(title))
 
         # TODO: ADD DISCUSSION SLIDE
 
