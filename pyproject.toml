@@ -1,0 +1,13 @@
+[project]
+name = "manim-presentation"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "manim>=0.18.1",
+    "manim-slides[full]>=5.2.0",
+    "pyside6>=6.8.1.1",
+    "ruff>=0.8.6",
+    "setuptools>=75.7.0",
+]
