@@ -3,11 +3,15 @@ from manim_slides import Slide
 
 
 class Presentation(Slide):
+    # TODO: Remove having to press twice per slide
+    # TODO: Look if the presentation reaches 15min
+    # TODO: Look if I can host with GitHub Pages
+
     def construct(self):
         # Title Slide: Show main presentation title with author
         title = VGroup(
-            Text("Fraud Detection of Cryptocurrencies", t2c={"[0:15]": BLUE}),
-            Text("using Reddit data", t2c={"Reddit": RED}),
+            Text("Fraud Detection of Cryptocurrencies", t2c={"[0:15]": RED, "Cryptocurrencies": YELLOW}),
+            Text("using Reddit data", t2c={"Reddit": ORANGE}),
             Text(
                 "by Gabriel Torres Gamez",
                 color=GREY,
@@ -98,9 +102,9 @@ class Presentation(Slide):
 
         idea_title = Text("Idea").to_edge(UL)
         idea_points = VGroup(
-            Text("Models trained on social media data before scam events").scale(0.8),
-            Text("Detect fraudulent cryptocurrencies using machine learning").scale(0.8),
-            Text("Compare graph-based and traditional models").scale(0.8),
+            Text("Train models on pre-scam data").scale(0.8),
+            Text("Detect fraud with machine learning").scale(0.8),
+            Text("Compare graph and traditional models").scale(0.8),
         ).arrange(DOWN, aligned_edge=LEFT, buff=1)
 
         self.play(Write(idea_title))
@@ -113,9 +117,9 @@ class Presentation(Slide):
 
         reddit_title = Text("Why Reddit?").to_edge(UL)
         reddit_points = VGroup(
-            Text("Reddit offers hierarchical data ideal for graph-based models").scale(0.8),
-            Text("Rich social interactions provide meaningful insights").scale(0.8),
-            Text("Google and Twitter lacked reliable or suitable data structures").scale(0.8),
+            Text("Hierarchical data for graphs").scale(0.8),
+            Text("Probably valuable edges").scale(0.8),
+            Text("Many discussions").scale(0.8),
         ).arrange(DOWN, aligned_edge=LEFT, buff=1)
 
         self.play(Write(reddit_title))
@@ -322,11 +326,21 @@ class Presentation(Slide):
 
         self.play(FadeIn(main_group))
 
-        # Animate cross-validation process
-        for coin in coins:
-            self.play(coin.animate.shift(DOWN * 1.5))
+        # Animate cross-validation process with parallel movement
+        for i, coin in enumerate(coins):
+            if i > 0:
+                # Move the previous coin up as the current coin moves down
+                self.play(
+                    coins[i - 1].animate.shift(UP * 1.5),
+                    coin.animate.shift(DOWN * 1.5),
+                )
+            else:
+                # Move the first coin down without a previous coin
+                self.play(coin.animate.shift(DOWN * 1.5))
             self.wait(0.5)
-            self.play(coin.animate.shift(UP * 1.5))
+
+        # After the loop, move the last coin up
+        self.play(coins[-1].animate.shift(UP * 1.5))
 
         self.next_slide()
         self.play(FadeOut(main_group), FadeOut(tm_title))
@@ -341,7 +355,7 @@ class Presentation(Slide):
             Text("Assumes independence between features").scale(0.8),
             Text("Effective for text classification").scale(0.8),
             Text("Requires numerical input").scale(0.8),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=1)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=2 / 3)
 
         self.play(Write(mnb_title))
         self.play(Write(mnb_points))
@@ -433,7 +447,6 @@ class Presentation(Slide):
         self.play(FadeOut(main_group), FadeOut(title))
 
         # Linear Support Vector Classifier
-
         self.next_slide()
         svc_title = Text("Linear Support Vector Classifier").to_edge(UL)
         svc_points = VGroup(
@@ -441,7 +454,7 @@ class Presentation(Slide):
             Text("Maximizes margin between classes").scale(0.8),
             Text("Requires numerical input").scale(0.8),
             Text("Effective for linearly separable data").scale(0.8),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=1)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=2 / 3)
 
         self.play(Write(svc_title))
         self.play(Write(svc_points))
@@ -536,16 +549,19 @@ class Presentation(Slide):
         self.next_slide()
         gat_title = Text("Graph Attention Network (GAT)").to_edge(UL)
         gat_title.z_index = 1
-        gat_graphic = ImageMobject("img/GAT.png").scale(0.8).arrange(DOWN)
+        gat_graphic = Group(
+            ImageMobject("img/GAT_node.png").scale(0.8),
+            ImageMobject("img/GAT_tsne.png").scale(1),
+        ).arrange(RIGHT)
 
         gat_graphic_attribution = (
             VGroup(
                 Text(
-                    "Pichka, Ebrahim. (2023, Juli 26). Graph Attention Networks Paper Explained With Illustration and PyTorch Implementation.",
+                    "Veličković, P., Cucurull, G., Casanova, A., Romero, A., Liò, P., & Bengio, Y. (2018).",
                     color=GREY,
                 ).scale(0.4),
                 Text(
-                    "https://epichka.com/blog/2023/gat-paper-explained/",
+                    "Graph Attention Networks (arXiv:1710.10903). arXiv. https://doi.org/10.48550/arXiv.1710.10903",
                     color=GREY,
                 ).scale(0.4),
             )
@@ -616,8 +632,42 @@ class Presentation(Slide):
         self.next_slide()
         self.play(FadeOut(main_group), FadeOut(title))
 
-        # TODO: ADD DISCUSSION SLIDE
-        # Discussion Slide
+        # DISCUSSION SLIDE
+        self.next_slide()
+
+        discussion_scale = 0.65  # Parameter for scaling text
+
+        # Title
+        discussion_title = Text("Discussion").to_edge(UL)
+
+        # Results section
+        results_title = Text("Results", color=BLUE).scale(discussion_scale)
+        results_points = VGroup(
+            Text("1. Models struggled with scams").scale(discussion_scale),
+            Text("2. Reddit lacks predictive signals").scale(discussion_scale),
+            Text("3. Imbalanced dataset limits accuracy").scale(discussion_scale),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.5)
+
+        results_group = VGroup(results_title, results_points).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+
+        # Improvements section
+        improvements_title = Text("Possible Improvements", color=GREEN).scale(discussion_scale)
+        improvements_points = VGroup(
+            Text("1. Fine-tune embeddings").scale(discussion_scale),
+            Text("2. Use richer graph data").scale(discussion_scale),
+            Text("3. Add price and volume data").scale(discussion_scale),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.5)
+
+        improvements_group = VGroup(improvements_title, improvements_points).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+
+        # Align the two groups side by side
+        discussion_content = VGroup(results_group, improvements_group).arrange(RIGHT, buff=1)
+
+        # Animate slide elements
+        self.play(Write(discussion_title))
+        self.play(Write(discussion_content))
+        self.next_slide()
+        self.play(FadeOut(discussion_title), FadeOut(discussion_content))
 
         # THANK YOU SLIDE
         self.next_slide()
