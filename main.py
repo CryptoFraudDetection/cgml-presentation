@@ -42,7 +42,7 @@ class Presentation(Slide):
         # Pump and Dump Scheme Visualization: Create animated price chart
         self.next_slide()
 
-        title = Text("Pump and Dump Scheme").scale(1.5)
+        title = Text("Pump and Dump Scheme")
         self.play(Write(title))
         self.play(FadeOut(title))
 
@@ -202,7 +202,7 @@ class Presentation(Slide):
         coin_name_size = 0.4
         group_title_size = 0.5
 
-        ts_title = Text("Train - Test split").scale(0.9).to_edge(UL)
+        ts_title = Text("Train - Test split").to_edge(UL)
         self.play(Write(ts_title))
 
         # Create train set non-scam coins
@@ -298,7 +298,7 @@ class Presentation(Slide):
         # Training Methodology: Show cross-validation process
         self.next_slide()
 
-        tm_title = Text("Training Methodology").scale(0.9).to_edge(UL)
+        tm_title = Text("Training Methodology").to_edge(UL)
         self.play(Write(tm_title))
 
         # Create coin groups for cross-validation
@@ -333,11 +333,11 @@ class Presentation(Slide):
 
         # Model Descriptions: Present each classification model
 
-        # TODO: Mention evaluation points
         # Multinomial Naive Bayes
         self.next_slide()
-        mnb_title = Text("Multinomial Naive Bayes (Baseline)").scale(0.9).set_color(YELLOW).to_edge(UL)
+        mnb_title = Text("Multinomial Naive Bayes (Baseline)").to_edge(UL)
         mnb_points = VGroup(
+            Text("Used evaluation points", color=YELLOW).scale(0.8),
             Text("Assumes independence between features").scale(0.8),
             Text("Effective for text classification").scale(0.8),
             Text("Requires numerical input").scale(0.8),
@@ -434,10 +434,10 @@ class Presentation(Slide):
 
         # Linear Support Vector Classifier
 
-        # TODO: Mention that we dont use evaluation points anymore
         self.next_slide()
-        svc_title = Text("Linear Support Vector Classifier").scale(0.9).set_color(ORANGE).to_edge(UL)
+        svc_title = Text("Linear Support Vector Classifier").to_edge(UL)
         svc_points = VGroup(
+            Text("Stopped using evaluation points", color=YELLOW).scale(0.8),
             Text("Maximizes margin between classes").scale(0.8),
             Text("Requires numerical input").scale(0.8),
             Text("Effective for linearly separable data").scale(0.8),
@@ -534,19 +534,33 @@ class Presentation(Slide):
 
         # Graph Attention Network
         self.next_slide()
-        gat_title = Text("Graph Attention Network (GAT)").scale(0.9).set_color(GREEN).to_edge(UL)
-        gat_graphic = ImageMobject("img/GAT.png").scale(0.9).arrange(DOWN)
+        gat_title = Text("Graph Attention Network (GAT)").to_edge(UL)
+        gat_title.z_index = 1
+        gat_graphic = ImageMobject("img/GAT.png").scale(0.8).arrange(DOWN)
+
+        gat_graphic_attribution = (
+            VGroup(
+                Text(
+                    "Pichka, Ebrahim. (2023, Juli 26). Graph Attention Networks Paper Explained With Illustration and PyTorch Implementation.",
+                    color=GREY,
+                ).scale(0.4),
+                Text(
+                    "https://epichka.com/blog/2023/gat-paper-explained/",
+                    color=GREY,
+                ).scale(0.4),
+            )
+            .arrange(DOWN, buff=0.2)
+            .to_edge(DOWN)
+        )
+        placeholder = Rectangle(width=1, height=0.4).set_opacity(0)
+        gat_graphic_group = Group(placeholder, gat_graphic, gat_graphic_attribution).arrange(DOWN, buff=0.35)
 
         self.play(Write(gat_title))
-        self.play(FadeIn(gat_graphic))
+        self.play(FadeIn(gat_graphic_group))
         self.next_slide()
-        self.play(FadeOut(gat_title), FadeOut(gat_graphic))
-
-        # TODO: Show how GAT transforms a graph
+        self.play(FadeOut(gat_title), FadeOut(gat_graphic_group))
 
         # Results Slide
-
-        # Parameters for sizes
         title_size = 1
         header_size = 0.7
         coin_name_size = 0.7
@@ -603,5 +617,10 @@ class Presentation(Slide):
         self.play(FadeOut(main_group), FadeOut(title))
 
         # TODO: ADD DISCUSSION SLIDE
+        # Discussion Slide
 
-        # TODO: ADD THANK YOU SLIDE
+        # THANK YOU SLIDE
+        self.next_slide()
+
+        main_text = Text("Thank you for your attention!").scale(1.5)
+        self.play(Write(main_text))
