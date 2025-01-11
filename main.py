@@ -9,6 +9,10 @@ class Presentation(Slide):
 
     def construct(self):
         # Title Slide: Show main presentation title with author
+
+        # set default text font
+        Text.set_default(font="Times New Roman", warn_missing_font=True)
+
         title = VGroup(
             Text("Fraud Detection of Cryptocurrencies", t2c={"[0:15]": RED, "Cryptocurrencies": YELLOW}),
             Text("using Reddit data", t2c={"Reddit": ORANGE}),
