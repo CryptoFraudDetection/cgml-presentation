@@ -3,7 +3,6 @@ from manim_slides import Slide
 
 
 class Presentation(Slide):
-    # TODO: Remove having to press twice per slide
     # TODO: Look if the presentation reaches 15min
     # TODO: Look if I can host with GitHub Pages
 
@@ -14,10 +13,10 @@ class Presentation(Slide):
         Text.set_default(font="Times New Roman", warn_missing_font=True)
 
         title = VGroup(
-            Text("Fraud Detection of Cryptocurrencies", t2c={"[0:15]": RED, "Cryptocurrencies": YELLOW}),
-            Text("using Reddit data", t2c={"Reddit": ORANGE}),
+            Text("Betrugserkennung bei Kryptowährungen", t2c={"Betrugserkennung": RED}),
+            Text("mit Reddit-Daten", t2c={"Reddit": ORANGE}),
             Text(
-                "by Gabriel Torres Gamez",
+                "von Gabriel Torres Gamez",
                 color=GREY,
             ).scale(0.5),
         ).arrange(DOWN)
@@ -27,15 +26,13 @@ class Presentation(Slide):
         self.play(FadeOut(title))
 
         # Introduction Slide: Present FTC statistics about cryptocurrency fraud
-        self.next_slide()
-
         introduction = VGroup(
-            Text("According to a recent analysis"),
-            Text("by the Federal Trade Commission,", t2c={"Federal Trade Commission": BLUE}),
-            Text("consumers lost over", t2c={"lost": BLUE}),
-            Text("$1 billion", color=RED).scale(2),
-            Text("to cryptocurrency-related fraud", t2c={"cryptocurrency": BLUE, "fraud": BLUE}),
-            Text("between January 2021 and March 2022.", t2c={"January 2021": BLUE, "March 2022": BLUE}),
+            Text("Laut einer Analyse"),
+            Text("der Federal Trade Commission,"),
+            Text("verloren Verbraucher über", t2c={"verloren": RED}),
+            Text("$1 Milliarde", color=RED).scale(2),
+            Text("durch Kryptowährungsbetrug"),
+            Text("zwischen Januar 2021 und März 2022.", t2c={"Januar 2021": BLUE, "März 2022": BLUE}),
             Text(
                 "«New Analysis Finds Consumers Reported Losing More than $1 Billion in Cryptocurrency to Scams since 2021»,",
                 color=GREY,
@@ -48,9 +45,7 @@ class Presentation(Slide):
         self.play(FadeOut(introduction))
 
         # Pump and Dump Scheme Visualization: Create animated price chart
-        self.next_slide()
-
-        title = Text("Pump and Dump Scheme")
+        title = Text("Pump and Dump Schema")
         self.play(Write(title))
         self.play(FadeOut(title))
 
@@ -102,13 +97,11 @@ class Presentation(Slide):
         )
 
         # IDEA SLIDE
-        self.next_slide()
-
-        idea_title = Text("Idea").to_edge(UL)
+        idea_title = Text("Idee").to_edge(UL)
         idea_points = VGroup(
-            Text("Train models on pre-scam data").scale(0.8),
-            Text("Detect fraud with machine learning").scale(0.8),
-            Text("Compare graph and traditional models").scale(0.8),
+            Text("Modelle mit Vor-Betrugs-Daten trainieren").scale(0.8),
+            Text("Betrug mit Machine Learning erkennen").scale(0.8),
+            Text("Graph- und traditionelle Modelle vergleichen").scale(0.8),
         ).arrange(DOWN, aligned_edge=LEFT, buff=1)
 
         self.play(Write(idea_title))
@@ -117,13 +110,11 @@ class Presentation(Slide):
         self.play(FadeOut(idea_title), FadeOut(idea_points))
 
         # WHY REDDIT SLIDE
-        self.next_slide()
-
-        reddit_title = Text("Why Reddit?").to_edge(UL)
+        reddit_title = Text("Warum Reddit?").to_edge(UL)
         reddit_points = VGroup(
-            Text("Hierarchical data for graphs").scale(0.8),
-            Text("Probably valuable edges").scale(0.8),
-            Text("Many discussions").scale(0.8),
+            Text("Hierarchische Daten für Graphen").scale(0.8),
+            Text("Vermutlich wertvolle Verbindungen").scale(0.8),
+            Text("Viele Diskussionen").scale(0.8),
         ).arrange(DOWN, aligned_edge=LEFT, buff=1)
 
         self.play(Write(reddit_title))
@@ -132,11 +123,8 @@ class Presentation(Slide):
         self.play(FadeOut(reddit_title), FadeOut(reddit_points))
 
         # Data Scraping Process: Show workflow from Google to Reddit to Elasticsearch
-        self.next_slide()
-
         title = Text("Scraping").to_edge(UL)
 
-        # Search query example
         search_query = (
             Text("FTX Token site:reddit.com/r/CryptoCurrency after:2019-08-01 before:2022-11-07", color=GREY)
             .scale(0.5)
@@ -144,22 +132,19 @@ class Presentation(Slide):
         )
         rectangle = SurroundingRectangle(search_query, color=GREY, buff=0.3)
 
-        # Platform logos and labels
         google_logo = ImageMobject("img/google_logo.png").scale(0.55).to_edge(LEFT).shift(DOWN * 0.7).shift(RIGHT * 0.5)
         reddit_logo = ImageMobject("img/reddit_logo.png").scale(0.55).shift(DOWN * 0.7)
         elastic_logo = (
             ImageMobject("img/elasticsearch_logo.png").scale(0.55).to_edge(RIGHT).shift(DOWN * 0.7).shift(LEFT * 0.5)
         )
 
-        google_label = Text("Search for Reddit posts").next_to(google_logo, DOWN).scale(0.4)
-        reddit_label = Text("Extracting data using praw").next_to(reddit_logo, DOWN).scale(0.4)
-        elastic_label = Text("Store data in Elasticsearch").next_to(elastic_logo, DOWN).scale(0.4)
+        google_label = Text("Suche nach Reddit-Beiträgen").next_to(google_logo, DOWN).scale(0.4)
+        reddit_label = Text("Datenextraktion mit praw").next_to(reddit_logo, DOWN).scale(0.4)
+        elastic_label = Text("Datenspeicherung in Elasticsearch").next_to(elastic_logo, DOWN).scale(0.4)
 
-        # Workflow arrows
         arrow = Arrow(google_logo, reddit_logo).shift(DOWN * 1)
         arrow2 = Arrow(reddit_logo, elastic_logo).shift(DOWN * 1)
 
-        # Animate scraping workflow
         self.play(Write(title))
         self.play(
             Write(search_query, run_time=1),
@@ -190,9 +175,7 @@ class Presentation(Slide):
         )
 
         # Data Structure: Show Reddit data schema
-        self.next_slide()
-
-        title = Text("Data").to_edge(UL)
+        title = Text("Daten").to_edge(UL)
         reddit_structure = ImageMobject("img/reddit_structure.png").scale(0.8)
         reddit_structure.set_resampling_algorithm(RESAMPLING_ALGORITHMS["lanczos"])
 
@@ -204,13 +187,11 @@ class Presentation(Slide):
 
         # Train-Test Split: Display cryptocurrency dataset division
 
-        self.next_slide()
-
         coin_image_size = 0.25
         coin_name_size = 0.4
         group_title_size = 0.5
 
-        ts_title = Text("Train - Test split").to_edge(UL)
+        ts_title = Text("Train - Test Split").to_edge(UL)
         self.play(Write(ts_title))
 
         # Create train set non-scam coins
@@ -259,22 +240,22 @@ class Presentation(Slide):
 
         # Group coins by category
         train_non_scam_group = Group(
-            Text("Train Non-Scam").scale(group_title_size),
+            Text("Train Nicht-Betrug").scale(group_title_size),
             train_non_scam_items,
         ).arrange(DOWN, buff=0.3)
 
         train_scam_group = Group(
-            Text("Train Scam").scale(group_title_size),
+            Text("Train Betrug").scale(group_title_size),
             train_scam_items,
         ).arrange(DOWN, buff=0.3)
 
         test_non_scam_group = Group(
-            Text("Test Non-Scam").scale(group_title_size),
+            Text("Test Nicht-Betrug").scale(group_title_size),
             test_non_scam_items,
         ).arrange(DOWN, buff=0.3)
 
         test_scam_group = Group(
-            Text("Test Scam").scale(group_title_size),
+            Text("Test Betrug").scale(group_title_size),
             test_scam_items,
         ).arrange(DOWN, buff=0.3)
 
@@ -288,8 +269,8 @@ class Presentation(Slide):
         # Add dataset statistics
         explanation_text = (
             Group(
-                Text("Train set (7 coins): 4 Non-scam, 3 Scam").scale(0.5),
-                Text("Test set (4 coins): 2 Non-scam, 2 Scam").scale(0.5),
+                Text("Train Set (7 Coins): 4 Nicht-Betrug, 3 Betrug").scale(0.5),
+                Text("Test Set (4 Coins): 2 Nicht-Betrug, 2 Betrug").scale(0.5),
             )
             .arrange(DOWN, aligned_edge=LEFT, buff=0.1)
             .to_edge(DOWN)
@@ -304,9 +285,7 @@ class Presentation(Slide):
         )
 
         # Training Methodology: Show cross-validation process
-        self.next_slide()
-
-        tm_title = Text("Training Methodology").to_edge(UL)
+        tm_title = Text("Trainingsmethodik").to_edge(UL)
         self.play(Write(tm_title))
 
         # Create coin groups for cross-validation
@@ -330,36 +309,29 @@ class Presentation(Slide):
 
         self.play(FadeIn(main_group))
 
-        # Animate cross-validation process with parallel movement
+        # Cross-validation animation remains the same
         for i, coin in enumerate(coins):
             if i > 0:
-                # Move the previous coin up as the current coin moves down
                 self.play(
                     coins[i - 1].animate.shift(UP * 1.5),
                     coin.animate.shift(DOWN * 1.5),
                 )
             else:
-                # Move the first coin down without a previous coin
                 self.play(coin.animate.shift(DOWN * 1.5))
             self.wait(0.5)
 
-        # After the loop, move the last coin up
         self.play(coins[-1].animate.shift(UP * 1.5))
 
         self.next_slide()
         self.play(FadeOut(main_group), FadeOut(tm_title))
 
-        # Model Descriptions: Present each classification model
-
         # Multinomial Naive Bayes
-        self.next_slide()
         mnb_title = Text("Multinomial Naive Bayes (Baseline)").to_edge(UL)
         mnb_points = VGroup(
-            Text("Used evaluation points", color=YELLOW).scale(0.8),
-            Text("Assumes independence between features").scale(0.8),
-            Text("Effective for text classification").scale(0.8),
-            Text("Requires numerical input").scale(0.8),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=2 / 3)
+            Text("Simpelste Modell").scale(0.8),
+            Text("Identifiziert scamtypische Wörter").scale(0.8),
+            Text("Nimmt Unabhängigkeit zwischen Features an").scale(0.8),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=1)
 
         self.play(Write(mnb_title))
         self.play(Write(mnb_points))
@@ -367,8 +339,6 @@ class Presentation(Slide):
         self.play(FadeOut(mnb_title), FadeOut(mnb_points))
 
         # Results slide
-
-        # Parameters for sizes
         title_size = 1
         header_size = 0.7
         coin_name_size = 0.7
@@ -377,8 +347,9 @@ class Presentation(Slide):
         column_buff = 1
         group_buff = 2
 
-        title = Text("Metrics").scale(title_size).to_corner(UL)
+        title = Text("Metriken").scale(title_size).to_corner(UL)
 
+        # Keep scores dictionary as is - these are numbers
         scores = {
             "Avalanche": 1,
             "Bitcoin": 1,
@@ -451,23 +422,19 @@ class Presentation(Slide):
         self.play(FadeOut(main_group), FadeOut(title))
 
         # Linear Support Vector Classifier
-        self.next_slide()
         svc_title = Text("Linear Support Vector Classifier").to_edge(UL)
         svc_points = VGroup(
-            Text("Stopped using evaluation points", color=YELLOW).scale(0.8),
-            Text("Maximizes margin between classes").scale(0.8),
-            Text("Requires numerical input").scale(0.8),
-            Text("Effective for linearly separable data").scale(0.8),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=2 / 3)
+            Text("Maximiert Margin zwischen Klassen").scale(0.8),
+            Text("Effektiv für linear trennbare Daten").scale(0.8),
+            Text("Benötigt numerische Eingabe -> BERT").scale(0.8),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=1)
 
         self.play(Write(svc_title))
         self.play(Write(svc_points))
         self.next_slide()
         self.play(FadeOut(svc_title), FadeOut(svc_points))
 
-        # Results slide
-
-        # Parameters for sizes
+        # Results slide (metrics remain the same)
         title_size = 1
         header_size = 0.7
         coin_name_size = 0.7
@@ -476,7 +443,7 @@ class Presentation(Slide):
         column_buff = 1
         group_buff = 2
 
-        title = Text("Metrics").scale(title_size).to_corner(UL)
+        title = Text("Metriken").scale(title_size).to_corner(UL)
 
         scores = {
             "Avalanche": 0.528,
@@ -550,7 +517,6 @@ class Presentation(Slide):
         self.play(FadeOut(main_group), FadeOut(title))
 
         # Graph Attention Network
-        self.next_slide()
         gat_title = Text("Graph Attention Network (GAT)").to_edge(UL)
         gat_title.z_index = 1
         gat_graphic = Group(
@@ -637,44 +603,35 @@ class Presentation(Slide):
         self.play(FadeOut(main_group), FadeOut(title))
 
         # DISCUSSION SLIDE
-        self.next_slide()
+        discussion_scale = 0.6
 
-        discussion_scale = 0.65  # Parameter for scaling text
+        discussion_title = Text("Diskussion").to_edge(UL)
 
-        # Title
-        discussion_title = Text("Discussion").to_edge(UL)
-
-        # Results section
-        results_title = Text("Results", color=BLUE).scale(discussion_scale)
+        results_title = Text("Ergebnisse", color=BLUE).scale(discussion_scale)
         results_points = VGroup(
-            Text("1. Models struggled with scams").scale(discussion_scale),
-            Text("2. Reddit lacks predictive signals").scale(discussion_scale),
-            Text("3. Imbalanced dataset limits accuracy").scale(discussion_scale),
+            Text("Keine verlässliche Klassifizierung").scale(discussion_scale),
+            Text("Kommentare allein nicht ausreichend").scale(discussion_scale),
+            Text("Zu wenig Daten kleinerer Coins").scale(discussion_scale),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.5)
 
         results_group = VGroup(results_title, results_points).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
 
-        # Improvements section
-        improvements_title = Text("Possible Improvements", color=GREEN).scale(discussion_scale)
+        improvements_title = Text("Mögliche Verbesserungen", color=GREEN).scale(discussion_scale)
         improvements_points = VGroup(
-            Text("1. Fine-tune embeddings").scale(discussion_scale),
-            Text("2. Use richer graph data").scale(discussion_scale),
-            Text("3. Add price and volume data").scale(discussion_scale),
+            Text("Embeddings trainieren").scale(discussion_scale),
+            Text("Mehr Coindaten sammeln").scale(discussion_scale),
+            Text("Preis- und Volumendaten hinzufügen").scale(discussion_scale),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.5)
 
         improvements_group = VGroup(improvements_title, improvements_points).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
 
-        # Align the two groups side by side
         discussion_content = VGroup(results_group, improvements_group).arrange(RIGHT, buff=1)
 
-        # Animate slide elements
         self.play(Write(discussion_title))
         self.play(Write(discussion_content))
         self.next_slide()
         self.play(FadeOut(discussion_title), FadeOut(discussion_content))
 
         # THANK YOU SLIDE
-        self.next_slide()
-
-        main_text = Text("Thank you for your attention!").scale(1.5)
+        main_text = Text("Vielen Dank!").scale(1.5)
         self.play(Write(main_text))
